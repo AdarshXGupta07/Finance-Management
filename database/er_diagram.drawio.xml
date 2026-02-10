@@ -1,0 +1,26 @@
+<mxfile host="app.diagrams.net" modified="2026-02-10T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="pfms-er" name="PFMS ER Diagram">
+    <mxGraphModel dx="1450" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="u" value="User\nPK user_id\nname\nemail (UQ)\npassword_hash\ncreated_at" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#dae8fc;" vertex="1" parent="1"><mxGeometry x="50" y="50" width="220" height="150" as="geometry"/></mxCell>
+        <mxCell id="a" value="Account\nPK account_id\nFK user_id\naccount_name\naccount_type\nbalance" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="350" y="40" width="220" height="140" as="geometry"/></mxCell>
+        <mxCell id="c" value="Category\nPK category_id\ncategory_name\ncategory_type\nis_default" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#fff2cc;" vertex="1" parent="1"><mxGeometry x="350" y="220" width="220" height="130" as="geometry"/></mxCell>
+        <mxCell id="t" value="Transaction\nPK transaction_id\nFK user_id\nFK account_id\nFK category_id\ntransaction_type\namount\ntransaction_date" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f8cecc;" vertex="1" parent="1"><mxGeometry x="650" y="120" width="250" height="170" as="geometry"/></mxCell>
+        <mxCell id="b" value="Budget\nPK budget_id\nFK user_id\nFK category_id\nperiod_month\nperiod_year\nlimit_amount" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#e1d5e7;" vertex="1" parent="1"><mxGeometry x="350" y="390" width="220" height="150" as="geometry"/></mxCell>
+        <mxCell id="g" value="Goal\nPK goal_id\nFK user_id\ngoal_name\ntarget_amount\ncurrent_amount\ndeadline" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#d5e8d4;" vertex="1" parent="1"><mxGeometry x="50" y="250" width="220" height="140" as="geometry"/></mxCell>
+        <mxCell id="bi" value="Bill\nPK bill_id\nFK user_id\nbill_name\namount\ndue_date\nstatus" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#ffe6cc;" vertex="1" parent="1"><mxGeometry x="50" y="430" width="220" height="140" as="geometry"/></mxCell>
+        <mxCell id="fi" value="FinancialInsight\nPK insight_id\nFK user_id\ninsight_month\ninsight_year\ntotal_income\ntotal_expense\nsavings\nscore\noverspending_flag" style="shape=rectangle;whiteSpace=wrap;html=1;fillColor=#f5f5f5;" vertex="1" parent="1"><mxGeometry x="650" y="340" width="250" height="180" as="geometry"/></mxCell>
+        <mxCell id="e1" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="a" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="t" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="a" target="t" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="c" target="t" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="b" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="g" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="bi" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;" edge="1" source="u" target="fi" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

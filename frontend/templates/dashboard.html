@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Dashboard ({{ month }}/{{ year }})</h2>
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><div class="card p-3"><h6>Income</h6><h4>₹{{ '%.2f'|format(summary.total_income) }}</h4></div></div>
+  <div class="col-md-3"><div class="card p-3"><h6>Expense</h6><h4>₹{{ '%.2f'|format(summary.total_expense) }}</h4></div></div>
+  <div class="col-md-3"><div class="card p-3"><h6>Savings</h6><h4>₹{{ '%.2f'|format(summary.savings) }}</h4></div></div>
+  <div class="col-md-3"><div class="card p-3"><h6>Score</h6><h4>{{ '%.2f'|format(summary.savings_consistency_score) }}%</h4></div></div>
+</div>
+<div class="alert {{ 'alert-danger' if summary.overspending_flag else 'alert-success' }}">{{ summary.generated_message }}</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <h5>Recent Transactions</h5>
+    <table class="table table-striped">
+      <tr><th>Date</th><th>Type</th><th>Amount</th><th>Description</th></tr>
+      {% for t in recent_transactions %}
+      <tr><td>{{ t.transaction_date }}</td><td>{{ t.transaction_type }}</td><td>{{ t.amount }}</td><td>{{ t.description }}</td></tr>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="col-md-4">
+    <h5>Upcoming Bills</h5>
+    <ul class="list-group">
+      {% for b in upcoming_bills %}
+      <li class="list-group-item d-flex justify-content-between"><span>{{ b.bill_name }}<br><small>{{ b.due_date }}</small></span><strong>₹{{ b.amount }}</strong></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

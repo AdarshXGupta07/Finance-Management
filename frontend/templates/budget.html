@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Budget Planning</h2>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-2"><input class="form-control" type="number" name="period_month" min="1" max="12" placeholder="Month" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" name="period_year" min="2000" placeholder="Year" required></div>
+  <div class="col-md-3">
+    <select class="form-select" name="category_id"><option value="">Overall Budget</option>{% for c in categories %}<option value="{{ c.category_id }}">{{ c.category_name }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-3"><input class="form-control" type="number" step="0.01" name="limit_amount" placeholder="Budget limit" required></div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Save</button></div>
+</form>
+<table class="table table-striped"><tr><th>Month</th><th>Year</th><th>Category</th><th>Limit</th></tr>
+{% for b in budgets %}<tr><td>{{ b.period_month }}</td><td>{{ b.period_year }}</td><td>{{ b.category.category_name if b.category else 'Overall' }}</td><td>{{ b.limit_amount }}</td></tr>{% endfor %}
+</table>
+{% endblock %}
