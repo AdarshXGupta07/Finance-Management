@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Smart Financial Analytics</h2>
+<div class="row g-3 mb-3">
+  <div class="col-md-4"><div class="card p-3"><h6>Budget Utilization</h6><div class="progress"><div class="progress-bar" role="progressbar" style="width: {{ (summary.total_expense/summary.budget_limit*100) if summary.budget_limit else 0 }}%"></div></div><small>{{ '%.2f'|format(summary.total_expense) }} / {{ '%.2f'|format(summary.budget_limit) }}</small></div></div>
+  <div class="col-md-4"><div class="card p-3"><h6>Savings Growth</h6><h4>₹{{ '%.2f'|format(summary.savings) }}</h4></div></div>
+  <div class="col-md-4"><div class="card p-3"><h6>Alert</h6><p class="mb-0">{{ summary.generated_message }}</p></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-md-6"><canvas id="incomeExpenseChart"></canvas></div>
+  <div class="col-md-6"><canvas id="categoryPieChart"></canvas></div>
+  <div class="col-md-12"><canvas id="monthlyTrendChart"></canvas></div>
+</div>
+<h5 class="mt-4">Expense-heavy days</h5>
+<ul class="list-group">{% for d in heavy_days %}<li class="list-group-item d-flex justify-content-between"><span>{{ d.date }}</span><strong>₹{{ d.amount }}</strong></li>{% endfor %}</ul>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

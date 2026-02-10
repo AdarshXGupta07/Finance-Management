@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Income</h2>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-2"><input class="form-control" type="number" step="0.01" name="amount" placeholder="Amount" required></div>
+  <div class="col-md-3">
+    <select class="form-select" name="category_id">
+      <option value="">Select category</option>
+      {% for c in categories %}<option value="{{ c.category_id }}">{{ c.category_name }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3"><input class="form-control" type="date" name="transaction_date" required></div>
+  <div class="col-md-3"><input class="form-control" name="description" placeholder="Description"></div>
+  <div class="col-md-1"><button class="btn btn-success w-100">Add</button></div>
+</form>
+<table class="table table-bordered"><tr><th>Date</th><th>Category</th><th>Amount</th><th>Description</th></tr>
+{% for r in records %}<tr><td>{{ r.transaction_date }}</td><td>{{ r.category.category_name if r.category else '-' }}</td><td>{{ r.amount }}</td><td>{{ r.description }}</td></tr>{% endfor %}
+</table>
+{% endblock %}

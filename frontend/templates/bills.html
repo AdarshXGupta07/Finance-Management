@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Bill Reminders</h2>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-3"><input class="form-control" name="bill_name" placeholder="Bill name" required></div>
+  <div class="col-md-2"><input class="form-control" type="number" step="0.01" name="amount" placeholder="Amount" required></div>
+  <div class="col-md-2"><input class="form-control" type="date" name="due_date" required></div>
+  <div class="col-md-2"><select class="form-select" name="recurrence"><option>monthly</option><option>weekly</option><option>yearly</option></select></div>
+  <div class="col-md-2"><select class="form-select" name="status"><option>pending</option><option>paid</option></select></div>
+  <div class="col-md-1"><button class="btn btn-info w-100">Add</button></div>
+</form>
+<table class="table table-striped"><tr><th>Bill</th><th>Amount</th><th>Due Date</th><th>Recurrence</th><th>Status</th></tr>
+{% for b in records %}<tr><td>{{ b.bill_name }}</td><td>{{ b.amount }}</td><td>{{ b.due_date }}</td><td>{{ b.recurrence }}</td><td>{{ b.status }}</td></tr>{% endfor %}
+</table>
+{% endblock %}
