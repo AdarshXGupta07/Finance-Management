@@ -108,7 +108,7 @@ def expenses():
         .order_by(Transaction.transaction_date.desc())
         .all()
     )
-    return render_template("enhanced_expenses.html", categories=categories, records=records)
+    return render_template("expenses.html", categories=categories, records=records)
 
 
 @main_bp.route("/income", methods=["GET", "POST"])
@@ -156,7 +156,7 @@ def income():
         .order_by(Transaction.transaction_date.desc())
         .all()
     )
-    return render_template("enhanced_income.html", categories=categories, records=records)
+    return render_template("income.html", categories=categories, records=records)
 
 
 @main_bp.route("/delete-expense/<int:transaction_id>", methods=["POST"])

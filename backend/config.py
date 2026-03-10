@@ -6,5 +6,5 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "mysql+pymysql://root:Dhoni%4028@localhost/pfms_db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
