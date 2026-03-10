@@ -70,12 +70,28 @@ def expenses():
     if request.method == "POST":
         amount = float(request.form["amount"])
         category_id = request.form.get("category_id") or None
+        other_category = request.form.get("other_category", "").strip()
         transaction_date = datetime.strptime(request.form["transaction_date"], "%Y-%m-%d").date()
         description = request.form.get("description", "")
 
+        # Handle "Other" category
+        final_category_id = None
+        if category_id == "other" and other_category:
+            # Create new category
+            new_cat = Category(
+                category_name=other_category,
+                category_type="expense",
+                is_default=False
+            )
+            db.session.add(new_cat)
+            db.session.commit()
+            final_category_id = new_cat.category_id
+        elif category_id and category_id != "other":
+            final_category_id = int(category_id)
+
         txn = Transaction(
             user_id=current_user.user_id,
-            category_id=int(category_id) if category_id else None,
+            category_id=final_category_id,
             transaction_type="expense",
             amount=amount,
             transaction_date=transaction_date,
@@ -92,7 +108,7 @@ def expenses():
         .order_by(Transaction.transaction_date.desc())
         .all()
     )
-    return render_template("expenses.html", categories=categories, records=records)
+    return render_template("enhanced_expenses.html", categories=categories, records=records)
 
 
 @main_bp.route("/income", methods=["GET", "POST"])
@@ -102,12 +118,28 @@ def income():
     if request.method == "POST":
         amount = float(request.form["amount"])
         category_id = request.form.get("category_id") or None
+        other_category = request.form.get("other_category", "").strip()
         transaction_date = datetime.strptime(request.form["transaction_date"], "%Y-%m-%d").date()
         description = request.form.get("description", "")
 
+        # Handle "Other" category
+        final_category_id = None
+        if category_id == "other" and other_category:
+            # Create new category
+            new_cat = Category(
+                category_name=other_category,
+                category_type="income",
+                is_default=False
+            )
+            db.session.add(new_cat)
+            db.session.commit()
+            final_category_id = new_cat.category_id
+        elif category_id and category_id != "other":
+            final_category_id = int(category_id)
+
         txn = Transaction(
             user_id=current_user.user_id,
-            category_id=int(category_id) if category_id else None,
+            category_id=final_category_id,
             transaction_type="income",
             amount=amount,
             transaction_date=transaction_date,
@@ -124,7 +156,27 @@ def income():
         .order_by(Transaction.transaction_date.desc())
         .all()
     )
-    return render_template("income.html", categories=categories, records=records)
+    return render_template("enhanced_income.html", categories=categories, records=records)
+
+
+@main_bp.route("/delete-expense/<int:transaction_id>", methods=["POST"])
+@login_required
+def delete_expense(transaction_id):
+    txn = Transaction.query.filter_by(transaction_id=transaction_id, user_id=current_user.user_id, transaction_type="expense").first_or_404()
+    db.session.delete(txn)
+    db.session.commit()
+    flash("Expense deleted.", "success")
+    return redirect(url_for("main.expenses"))
+
+
+@main_bp.route("/delete-income/<int:transaction_id>", methods=["POST"])
+@login_required
+def delete_income(transaction_id):
+    txn = Transaction.query.filter_by(transaction_id=transaction_id, user_id=current_user.user_id, transaction_type="income").first_or_404()
+    db.session.delete(txn)
+    db.session.commit()
+    flash("Income deleted.", "success")
+    return redirect(url_for("main.income"))
 
 
 @main_bp.route("/budget", methods=["GET", "POST"])

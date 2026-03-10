@@ -28,8 +28,9 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
 
-    with app.app_context():
-        db.create_all()
+    # Comment out db.create_all() to avoid conflicts with existing database
+    # with app.app_context():
+    #     db.create_all()
 
     return app
 
