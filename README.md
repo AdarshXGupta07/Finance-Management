@@ -56,3 +56,4 @@ Detailed SQL examples are documented in:
 
 - `DATABASE_ENHANCEMENTS.md`
 - `database/SQL_QUERIES_USED.md`
+- `database/CHAPTER_3_COMPLEX_QUERIES.md`
