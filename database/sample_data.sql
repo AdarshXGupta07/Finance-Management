@@ -28,16 +28,10 @@ INSERT INTO budgets (user_id, category_id, period_month, period_year, limit_amou
 (1, 3, 1, 2026, 6000.00),
 (1, 6, 1, 2026, 4000.00);
 
-INSERT INTO goals (user_id, goal_name, target_amount, current_amount, deadline, status) VALUES
-(1, 'Emergency Fund', 200000.00, 60000.00, '2026-12-31', 'active'),
-(1, 'Vacation Trip', 100000.00, 25000.00, '2026-09-30', 'active');
+INSERT INTO goals (user_id, goal_name, target_amount, current_amount, deadline) VALUES
+(1, 'Emergency Fund', 200000.00, 60000.00, '2026-12-31'),
+(1, 'Vacation Trip', 100000.00, 25000.00, '2026-09-30');
 
 INSERT INTO bills (user_id, bill_name, amount, due_date, recurrence, status) VALUES
 (1, 'Internet Bill', 999.00, '2026-01-15', 'monthly', 'pending'),
 (1, 'Credit Card', 8500.00, '2026-01-20', 'monthly', 'pending');
-
-INSERT INTO financial_insights (
-    user_id, insight_month, insight_year, total_income, total_expense, savings,
-    savings_consistency_score, overspending_flag, generated_message
-) VALUES
-(1, 1, 2026, 95000.00, 5750.00, 89250.00, 93.95, FALSE, 'Your savings are improving');

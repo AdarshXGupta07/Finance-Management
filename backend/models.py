@@ -21,7 +21,6 @@ class User(UserMixin, db.Model):
     budgets = db.relationship("Budget", back_populates="user", cascade="all, delete-orphan")
     goals = db.relationship("Goal", back_populates="user", cascade="all, delete-orphan")
     bills = db.relationship("Bill", back_populates="user", cascade="all, delete-orphan")
-    insights = db.relationship("FinancialInsight", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self, password: str) -> None:
         self.password_hash = generate_password_hash(password)
@@ -119,21 +118,3 @@ class Bill(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user = db.relationship("User", back_populates="bills")
-
-
-class FinancialInsight(db.Model):
-    __tablename__ = "financial_insights"
-
-    insight_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False)
-    insight_month = db.Column(db.Integer, nullable=False)
-    insight_year = db.Column(db.Integer, nullable=False)
-    total_income = db.Column(db.Numeric(12, 2), nullable=False, default=0)
-    total_expense = db.Column(db.Numeric(12, 2), nullable=False, default=0)
-    savings = db.Column(db.Numeric(12, 2), nullable=False, default=0)
-    savings_consistency_score = db.Column(db.Numeric(5, 2), nullable=False, default=0)
-    overspending_flag = db.Column(db.Boolean, nullable=False, default=False)
-    generated_message = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-
-    user = db.relationship("User", back_populates="insights")

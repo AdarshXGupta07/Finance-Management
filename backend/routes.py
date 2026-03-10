@@ -10,6 +10,7 @@ from analytics import (
     chart_data,
     category_expense_data,
     expense_heavy_days,
+    render_analytics_plots,
 )
 
 
@@ -258,7 +259,8 @@ def analytics_page():
     month, year = current_period()
     summary = upsert_financial_insight(current_user.user_id, month, year)
     heavy_days = expense_heavy_days(current_user.user_id, month, year)
-    return render_template("analytics.html", summary=summary, heavy_days=heavy_days, year=year)
+    plots = render_analytics_plots(current_user.user_id, month, year)
+    return render_template("analytics.html", summary=summary, heavy_days=heavy_days, year=year, plots=plots)
 
 
 @main_bp.route("/api/analytics")

@@ -1,14 +1,23 @@
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
+from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sqlalchemy import extract, func
 
-from models import db, Transaction, Budget, FinancialInsight, Category
+from models import db, Transaction, Budget, Category
 
 
 def _to_float(value):
-    return float(value or 0)
+    if value is None:
+        return 0.0
+    if isinstance(value, Decimal):
+        return float(value)
+    return float(value)
 
 
 def calculate_monthly_summary(user_id: int, month: int, year: int):
@@ -56,20 +65,8 @@ def calculate_monthly_summary(user_id: int, month: int, year: int):
 
 
 def upsert_financial_insight(user_id: int, month: int, year: int):
-    summary = calculate_monthly_summary(user_id, month, year)
-    insight = FinancialInsight.query.filter_by(user_id=user_id, insight_month=month, insight_year=year).first()
-    if not insight:
-        insight = FinancialInsight(user_id=user_id, insight_month=month, insight_year=year, generated_message="")
-        db.session.add(insight)
-
-    insight.total_income = Decimal(str(summary["total_income"]))
-    insight.total_expense = Decimal(str(summary["total_expense"]))
-    insight.savings = Decimal(str(summary["savings"]))
-    insight.savings_consistency_score = Decimal(str(summary["savings_consistency_score"]))
-    insight.overspending_flag = summary["overspending_flag"]
-    insight.generated_message = summary["generated_message"]
-    db.session.commit()
-    return summary
+    # Kept for route compatibility: now computes analytics on demand
+    return calculate_monthly_summary(user_id, month, year)
 
 
 def chart_data(user_id: int, year: int):
@@ -143,6 +140,53 @@ def expense_heavy_days(user_id: int, month: int, year: int):
         .all()
     )
     return [{"date": d.isoformat(), "amount": _to_float(a)} for d, a in rows]
+
+
+def render_analytics_plots(user_id: int, month: int, year: int):
+    sns.set_theme(style="whitegrid")
+    annual = chart_data(user_id, year)
+    category = category_expense_data(user_id, month, year)
+
+    out_dir = Path(__file__).resolve().parent.parent / "frontend" / "static" / "generated"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    income_expense_path = out_dir / f"income_expense_{user_id}.png"
+    category_path = out_dir / f"category_{user_id}.png"
+    trend_path = out_dir / f"trend_{user_id}.png"
+
+    plt.figure(figsize=(6, 4))
+    sns.barplot(x=["Income", "Expense"], y=[sum(annual["income"]), sum(annual["expense"])], palette=["#198754", "#dc3545"])
+    plt.title("Annual Income vs Expense")
+    plt.tight_layout()
+    plt.savefig(income_expense_path)
+    plt.close()
+
+    plt.figure(figsize=(6, 4))
+    if category["values"]:
+        plt.pie(category["values"], labels=category["labels"], autopct="%1.1f%%")
+        plt.title("Category-wise Expense")
+    else:
+        plt.text(0.5, 0.5, "No expense data", ha="center", va="center")
+        plt.axis("off")
+    plt.tight_layout()
+    plt.savefig(category_path)
+    plt.close()
+
+    plt.figure(figsize=(8, 4))
+    sns.lineplot(x=annual["months"], y=annual["income"], label="Income", color="#198754")
+    sns.lineplot(x=annual["months"], y=annual["expense"], label="Expense", color="#dc3545")
+    plt.title("Monthly Trend")
+    plt.xlabel("Month")
+    plt.ylabel("Amount")
+    plt.tight_layout()
+    plt.savefig(trend_path)
+    plt.close()
+
+    return {
+        "income_expense_plot": f"generated/{income_expense_path.name}",
+        "category_plot": f"generated/{category_path.name}",
+        "trend_plot": f"generated/{trend_path.name}",
+    }
 
 
 def current_period():

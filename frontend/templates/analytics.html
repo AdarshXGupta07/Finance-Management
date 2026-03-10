@@ -7,13 +7,10 @@
   <div class="col-md-4"><div class="card p-3"><h6>Alert</h6><p class="mb-0">{{ summary.generated_message }}</p></div></div>
 </div>
 <div class="row g-4">
-  <div class="col-md-6"><canvas id="incomeExpenseChart"></canvas></div>
-  <div class="col-md-6"><canvas id="categoryPieChart"></canvas></div>
-  <div class="col-md-12"><canvas id="monthlyTrendChart"></canvas></div>
+  <div class="col-md-6"><img class="img-fluid rounded border" src="{{ url_for('static', filename=plots.income_expense_plot) }}" alt="Income expense chart"></div>
+  <div class="col-md-6"><img class="img-fluid rounded border" src="{{ url_for('static', filename=plots.category_plot) }}" alt="Category expense chart"></div>
+  <div class="col-md-12"><img class="img-fluid rounded border" src="{{ url_for('static', filename=plots.trend_plot) }}" alt="Monthly trend chart"></div>
 </div>
 <h5 class="mt-4">Expense-heavy days</h5>
 <ul class="list-group">{% for d in heavy_days %}<li class="list-group-item d-flex justify-content-between"><span>{{ d.date }}</span><strong>₹{{ d.amount }}</strong></li>{% endfor %}</ul>
-{% endblock %}
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
 {% endblock %}
