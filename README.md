@@ -38,11 +38,10 @@ PersonalFinanceManagementSystem/
   - Expense-heavy days
   - Savings consistency score
   - Monthly summary insights
-- Visual analytics via Chart.js:
-  - Income vs Expense (bar)
-  - Category-wise Expense (pie)
-  - Monthly trend (line)
-  - Budget utilization meter
+- Visual analytics via Matplotlib + Seaborn (server-generated charts):
+  - Income vs Expense
+  - Category-wise Expense
+  - Monthly trend
 
 ## Setup and Run
 
@@ -79,7 +78,6 @@ The ER diagram (`database/er_diagram.drawio.xml`) contains these entities:
 5. **Budget** – month-year spending constraints per user (and optional category).
 6. **Goal** – user savings/target objectives.
 7. **Bill** – recurring dues and reminders.
-8. **FinancialInsight** – derived monthly analytics and smart alerts.
 
 ### Cardinality (1:N)
 - User → Accounts
@@ -89,7 +87,6 @@ The ER diagram (`database/er_diagram.drawio.xml`) contains these entities:
 - User → Budgets
 - User → Goals
 - User → Bills
-- User → FinancialInsights
 
 ## Normalization (3NF)
 
@@ -98,7 +95,7 @@ The ER diagram (`database/er_diagram.drawio.xml`) contains these entities:
 - **3NF**: Removed transitive dependencies:
   - Category details stored only in `categories`.
   - User profile stored only in `users`.
-  - Insights separated into `financial_insights` instead of denormalized in `transactions`.
+  - Monthly analytics are computed from `transactions`, `budgets`, and `bills` without duplicating transactional facts.
 
 ## Why this PFMS is better than basic trackers
 
@@ -116,4 +113,4 @@ The ER diagram (`database/er_diagram.drawio.xml`) contains these entities:
 - Enforces data integrity with PK/FK/UNIQUE/CHECK constraints.
 - Uses ORM (SQLAlchemy) + raw SQL schema for academic clarity.
 - Shows relationship mapping and normalization rationale clearly.
-- Implements analytical SQL aggregations and stores monthly insight snapshots.
+- Implements analytical SQL aggregations and renders visual insights for monthly analysis.

@@ -1,5 +1,4 @@
--- Personal Finance Management System (PFMS)
--- 3NF normalized schema
+-- Personal Finance Management System (ER-aligned)
 CREATE DATABASE IF NOT EXISTS pfms_db;
 USE pfms_db;
 
@@ -78,20 +77,4 @@ CREATE TABLE bills (
     status ENUM('pending', 'paid', 'overdue') NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_bill_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
-);
-
-CREATE TABLE financial_insights (
-    insight_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    insight_month TINYINT NOT NULL CHECK (insight_month BETWEEN 1 AND 12),
-    insight_year SMALLINT NOT NULL,
-    total_income DECIMAL(12,2) NOT NULL DEFAULT 0,
-    total_expense DECIMAL(12,2) NOT NULL DEFAULT 0,
-    savings DECIMAL(12,2) NOT NULL DEFAULT 0,
-    savings_consistency_score DECIMAL(5,2) NOT NULL DEFAULT 0,
-    overspending_flag BOOLEAN NOT NULL DEFAULT FALSE,
-    generated_message VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_insight_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    CONSTRAINT uq_monthly_insight UNIQUE (user_id, insight_month, insight_year)
 );
